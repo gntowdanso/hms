@@ -1,7 +1,4 @@
 {
   "buildCommand": "npm run build",
-  "installCommand": "npm ci",
-  "env": {
-    "DATABASE_URL_HMS": "@DATABASE_URL_HMS"
-  }
+  "installCommand": "npm ci"
 }
