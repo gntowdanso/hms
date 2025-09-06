@@ -269,9 +269,17 @@ model PrescriptionDetail {
   medicine       Medicine     @relation(fields: [medicineId], references: [id])
 }
 
+model LabType {
+  id        Int       @id @default(autoincrement())
+  name      String
+  labTests  LabTest[]
+}
+
 model LabTest {
   id           Int          @id @default(autoincrement())
   username     String
+  labTypeId    Int
+  labtype      LabType @relation(fields:[labTypeId],references:[id])
   testName     String
   description  String?
   departmentId Int
@@ -292,6 +300,9 @@ model LabRequest {
   doctor      Doctor     @relation(fields: [doctorId], references: [id])
   test        LabTest    @relation(fields: [testId], references: [id])
   result      LabResult?
+  imageBase64 String?   // base64 of the lab request image (optional)
+  imageURL    String?   // URL to the lab request image (optional)
+  details     LabResultDetails[]
 }
 
 model LabResult {
@@ -302,7 +313,27 @@ model LabResult {
   resultDate    DateTime
   verifiedBy    Int
   labRequest    LabRequest @relation(fields: [labRequestId], references: [id])
+  imageBase64   String?   // base64 of the lab result image (optional)
+  imageURL      String?   // URL to the lab result image (optional)
+  details      LabResultDetails[]
 }
+
+model LabResultDetails {
+  id             Int        @id @default(autoincrement())
+  username       String
+  labRequestId   Int
+  labResultId    Int
+  code           String
+  result         String
+  referenceRange String?
+  flag           String?
+  rating         String?
+  unit           String?
+
+  labRequest     LabRequest @relation(fields: [labRequestId], references: [id])
+  labResult      LabResult  @relation(fields: [labResultId], references: [id])
+}
+
 
 model Treatment {
   id            Int      @id @default(autoincrement())
@@ -384,16 +415,28 @@ model Supplier {
 //
 // 💰 FINANCE & BILLING
 //
+
+model FeesAndCharges {
+  id            Int       @id @default(autoincrement())
+  type          String
+  amountPerUnit Float
+  unit          String
+  billing       Billing[]
+}
 model Billing {
   id          Int           @id @default(autoincrement())
   username    String
   patientId   Int
   admissionId Int?          @unique
+  feesAndChargesId Int
+  quantity     Int
+  unit          String
   totalAmount Float
   status      BillingStatus
   billingDate DateTime
   patient     Patient       @relation(fields: [patientId], references: [id])
   admission   Admission?    @relation(fields: [admissionId], references: [id])
+  feesAndCharges FeesAndCharges @relation(fields: [feesAndChargesId], references: [id])
   invoices    Invoice[]
 }
 

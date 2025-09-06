@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { FaUser, FaUsers, FaChalkboardTeacher, FaBook, FaCog, FaLayerGroup, FaTools, FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import { FaUser, FaUsers, FaChalkboardTeacher, FaBook, FaCog, FaLayerGroup, FaTools, FaChevronDown, FaChevronRight, FaPills, FaWarehouse, FaDollarSign } from 'react-icons/fa';
 
 interface MenuItem {
   label: string;
@@ -19,12 +19,41 @@ const menuItems: MenuItem[] = [
   { label: 'Staff', icon: <FaChalkboardTeacher />, group: 'Management', href: '/management/staff' },
   { label: 'User Account', icon: <FaChalkboardTeacher />, group: 'Management', href: '/management/useraccount' },
 
-  { label: 'Patient', icon: <FaUser />, group: 'Patient', href: '/management/patient' },
+  { label: 'Patients', icon: <FaUsers />, group: 'Patient', href: '/patient/patients' },
+  { label: 'Admissions', icon: <FaUser />, group: 'Patient', href: '/patient/admissions' },
+  { label: 'Diagnoses', icon: <FaUser />, group: 'Patient', href: '/patient/diagnoses' },
+  { label: 'Prescriptions', icon: <FaUser />, group: 'Patient', href: '/patient/prescriptions' },
+  { label: 'Treatments', icon: <FaUser />, group: 'Patient', href: '/patient/treatments' },
+  { label: 'Medical Records', icon: <FaUser />, group: 'Patient', href: '/patient/medicalrecords' },
+  { label: 'Appointments', icon: <FaUser />, group: 'Patient', href: '/patient/appointments' },
+  { label: 'Doctors', icon: <FaUser />, group: 'Patient', href: '/patient/doctors' },
+  { label: 'Nurses', icon: <FaUser />, group: 'Patient', href: '/patient/nurses' },
+
+  { label: 'Lab Types', icon: <FaBook />, group: 'Lab', href: '/lab/types' },
+  { label: 'Lab Tests', icon: <FaBook />, group: 'Lab', href: '/lab/tests' },
+  { label: 'Lab Requests', icon: <FaBook />, group: 'Lab', href: '/lab/requests' },
+  { label: 'Lab Results', icon: <FaBook />, group: 'Lab', href: '/lab/results' },
+  { label: 'Result Details', icon: <FaBook />, group: 'Lab', href: '/lab/resultdetails' },
+
+  { label: 'Medicines', icon: <FaPills />, group: 'Pharmacy', href: '/pharmacy/medicines' },
+  { label: 'Suppliers', icon: <FaUsers />, group: 'Pharmacy', href: '/pharmacy/suppliers' },
+  { label: 'Inventory', icon: <FaWarehouse />, group: 'Pharmacy', href: '/pharmacy/inventory' },
+  { label: 'Transactions', icon: <FaPills />, group: 'Pharmacy', href: '/pharmacy/transactions' },
+
+  { label: 'Fees & Charges', icon: <FaDollarSign />, group: 'Finance', href: '/finance/fees' },
+  { label: 'Billing', icon: <FaDollarSign />, group: 'Finance', href: '/finance/billing' },
+  { label: 'Invoices', icon: <FaDollarSign />, group: 'Finance', href: '/finance/invoices' },
+  { label: 'Payments', icon: <FaDollarSign />, group: 'Finance', href: '/finance/payments' },
+  { label: 'Insurance', icon: <FaDollarSign />, group: 'Finance', href: '/finance/insurance' },
+  { label: 'Expenses', icon: <FaDollarSign />, group: 'Finance', href: '/finance/expenses' },
+
   { label: 'Settings', icon: <FaCog />, group: 'System', href: '/settings' },
 ];
 
 const groupIcons: Record<string, React.ReactNode> = {
   Management: <FaLayerGroup className="mr-2" />,
+  Pharmacy: <FaPills className="mr-2" />,
+  Finance: <FaDollarSign className="mr-2" />,
   Users: <FaUser className="mr-2" />,
   System: <FaTools className="mr-2" />,
 };
@@ -42,7 +71,7 @@ const SidebarMenu: React.FC = () => {
 
   return (
     <aside className="w-64 h-screen bg-gray-800 text-white flex flex-col p-4">
-      <h1 className="text-xl font-bold mb-6">Hosptal MS</h1>
+  <h1 className="text-xl font-bold mb-6">Hospital MS</h1>
       {Object.entries(groupedItems).map(([group, items]) => (
         <div key={group} className="mb-6">
           <div className="flex items-center justify-between text-gray-400 uppercase text-xs mb-2 cursor-pointer" onClick={() => toggleGroup(group)}>
