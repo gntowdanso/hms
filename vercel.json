@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci",
+  "env": {
+    "DATABASE_URL": "@database_url"
+  }
+}

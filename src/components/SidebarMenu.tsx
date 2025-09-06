@@ -42,7 +42,7 @@ const SidebarMenu: React.FC = () => {
 
   return (
     <aside className="w-64 h-screen bg-gray-800 text-white flex flex-col p-4">
-      <h1 className="text-xl font-bold mb-6">School SMS</h1>
+      <h1 className="text-xl font-bold mb-6">Hosptal MS</h1>
       {Object.entries(groupedItems).map(([group, items]) => (
         <div key={group} className="mb-6">
           <div className="flex items-center justify-between text-gray-400 uppercase text-xs mb-2 cursor-pointer" onClick={() => toggleGroup(group)}>

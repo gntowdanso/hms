@@ -57,7 +57,7 @@ enum TransactionType {
 // 🏥 CORE ENTITIES
 //
 model Hospital {
-  id              Int       @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   username        String
   name            String
   address         String
@@ -65,41 +65,43 @@ model Hospital {
   licenseNumber   String
   establishedDate DateTime
   type            String
-   
+
+  Department Department[]
+  Patient    Patient[]
 }
 
 model Department {
-  id          Int       @id @default(autoincrement())
-  username    String
-  name        String
-  description String?
-  hospitalId  Int
-  hospital    Hospital   @relation(fields: [hospitalId], references: [id])
-  doctors     Doctor[]
-  nurses      Nurse[]
-  staff       Staff[]
-  wards       Ward[]
+  id           Int           @id @default(autoincrement())
+  username     String
+  name         String
+  description  String?
+  hospitalId   Int
+  hospital     Hospital      @relation(fields: [hospitalId], references: [id])
+  doctors      Doctor[]
+  nurses       Nurse[]
+  staff        Staff[]
+  wards        Ward[]
   appointments Appointment[]
-  labTests    LabTest[]
+  labTests     LabTest[]
 }
 
 model Ward {
-  id           Int       @id @default(autoincrement())
+  id           Int         @id @default(autoincrement())
   username     String
   name         String
   capacity     Int
   departmentId Int
-  department   Department @relation(fields: [departmentId], references: [id])
+  department   Department  @relation(fields: [departmentId], references: [id])
   rooms        Room[]
   nurses       Nurse[]
   admissions   Admission[]
 }
 
 model Room {
-  id       Int       @id @default(autoincrement())
-  username String
-  wardId   Int
-  ward     Ward      @relation(fields: [wardId], references: [id])
+  id         Int         @id @default(autoincrement())
+  username   String
+  wardId     Int
+  ward       Ward        @relation(fields: [wardId], references: [id])
   admissions Admission[]
   roomNumber String
   bedNumber  String
@@ -110,46 +112,46 @@ model Room {
 // 👩‍⚕️ PEOPLE ENTITIES
 //
 model Patient {
-  id              Int       @id @default(autoincrement())
-  username        String
-  hospitalNo      String    @unique
-  firstName       String
-  lastName        String
-  gender          String
-  dob             DateTime
-  address         String
-  contactInfo     String
+  id               Int                   @id @default(autoincrement())
+  username         String
+  hospitalNo       String                @unique
+  firstName        String
+  lastName         String
+  gender           String
+  dob              DateTime
+  address          String
+  contactInfo      String
   emergencyContact String
-  admissionStatus AdmissionStatus
-  bloodGroup      String?
-  hospitalId      Int
-  hospital        Hospital   @relation(fields: [hospitalId], references: [id])
-  appointments    Appointment[]
-  admissions      Admission[]
-  diagnoses       Diagnosis[]
-  prescriptions   Prescription[]
-  labRequests     LabRequest[]
-  treatments      Treatment[]
-  medicalRecords  MedicalRecord[]
-  pharmacyTxns    PharmacyTransaction[]
-  billingRecords  Billing[]
-  insurance       Insurance?
+  admissionStatus  AdmissionStatus
+  bloodGroup       String?
+  hospitalId       Int
+  hospital         Hospital              @relation(fields: [hospitalId], references: [id])
+  appointments     Appointment[]
+  admissions       Admission[]
+  diagnoses        Diagnosis[]
+  prescriptions    Prescription[]
+  labRequests      LabRequest[]
+  treatments       Treatment[]
+  medicalRecords   MedicalRecord[]
+  pharmacyTxns     PharmacyTransaction[]
+  billingRecords   Billing[]
+  insurance        Insurance?
 }
 
 model Doctor {
-  id            Int       @id @default(autoincrement())
-  username      String
-  staffNo       String
-  firstName     String
-  lastName      String
-  specialty     String
-  qualification String
-  departmentId  Int
-  department    Department @relation(fields: [departmentId], references: [id])
-  contactInfo   String
-  email         String
+  id             Int             @id @default(autoincrement())
+  username       String
+  staffNo        String
+  firstName      String
+  lastName       String
+  specialty      String
+  qualification  String
+  departmentId   Int
+  department     Department      @relation(fields: [departmentId], references: [id])
+  contactInfo    String
+  email          String
   employmentDate DateTime
-  licenseNumber String
+  licenseNumber  String
   appointments   Appointment[]
   diagnoses      Diagnosis[]
   prescriptions  Prescription[]
@@ -160,48 +162,48 @@ model Doctor {
 }
 
 model Nurse {
-  id            Int       @id @default(autoincrement())
-  username      String
-  staffNo       String
-  firstName     String
-  lastName      String
-  qualification String
-  departmentId  Int
-  wardId        Int
-  department    Department @relation(fields: [departmentId], references: [id])
-  ward          Ward       @relation(fields: [wardId], references: [id])
-  contactInfo   String
+  id             Int        @id @default(autoincrement())
+  username       String
+  staffNo        String
+  firstName      String
+  lastName       String
+  qualification  String
+  departmentId   Int
+  wardId         Int
+  department     Department @relation(fields: [departmentId], references: [id])
+  ward           Ward       @relation(fields: [wardId], references: [id])
+  contactInfo    String
   employmentDate DateTime
 }
 
 model Staff {
-  id            Int       @id @default(autoincrement())
-  username      String
-  staffNo       String
-  firstName     String
-  lastName      String
-  role          String
-  departmentId  Int
-  department    Department @relation(fields: [departmentId], references: [id])
-  contactInfo   String
-  email         String
+  id             Int        @id @default(autoincrement())
+  username       String
+  staffNo        String
+  firstName      String
+  lastName       String
+  role           String
+  departmentId   Int
+  department     Department @relation(fields: [departmentId], references: [id])
+  contactInfo    String
+  email          String
   employmentDate DateTime
 }
 
 model UserAccount {
-  id          Int      @id @default(autoincrement())
-  username    String   @unique
+  id           Int       @id @default(autoincrement())
+  username     String    @unique
   passwordHash String
-  role        String   // (Patient, Doctor, Nurse, Staff, Admin)
-  lastLogin   DateTime?
-  isActive    Boolean  @default(true)
+  role         String // (Patient, Doctor, Nurse, Staff, Admin)
+  lastLogin    DateTime?
+  isActive     Boolean   @default(true)
 }
 
 //
 // 📋 MEDICAL RECORDS
 //
 model Appointment {
-  id              Int       @id @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   username        String
   patientId       Int
   doctorId        Int
@@ -209,9 +211,9 @@ model Appointment {
   appointmentDate DateTime
   reason          String
   status          AppointmentStatus
-  patient         Patient   @relation(fields: [patientId], references: [id])
-  doctor          Doctor    @relation(fields: [doctorId], references: [id])
-  department      Department @relation(fields: [departmentId], references: [id])
+  patient         Patient           @relation(fields: [patientId], references: [id])
+  doctor          Doctor            @relation(fields: [doctorId], references: [id])
+  department      Department        @relation(fields: [departmentId], references: [id])
 }
 
 model Admission {
@@ -224,39 +226,39 @@ model Admission {
   admissionDate DateTime
   dischargeDate DateTime?
   status        String
-  patient       Patient @relation(fields: [patientId], references: [id])
-  doctor        Doctor  @relation(fields: [doctorId], references: [id])
-  ward          Ward    @relation(fields: [wardId], references: [id])
-  room          Room    @relation(fields: [roomId], references: [id])
+  patient       Patient   @relation(fields: [patientId], references: [id])
+  doctor        Doctor    @relation(fields: [doctorId], references: [id])
+  ward          Ward      @relation(fields: [wardId], references: [id])
+  room          Room      @relation(fields: [roomId], references: [id])
   billing       Billing?
 }
 
 model Diagnosis {
-  id       Int       @id @default(autoincrement())
-  username String
+  id        Int      @id @default(autoincrement())
+  username  String
   patientId Int
   doctorId  Int
-  date     DateTime
+  date      DateTime
   condition String
   notes     String?
-  patient   Patient @relation(fields: [patientId], references: [id])
-  doctor    Doctor  @relation(fields: [doctorId], references: [id])
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
 }
 
 model Prescription {
-  id       Int       @id @default(autoincrement())
-  username String
+  id        Int                  @id @default(autoincrement())
+  username  String
   patientId Int
   doctorId  Int
-  date     DateTime
-  notes    String?
-  patient   Patient @relation(fields: [patientId], references: [id])
-  doctor    Doctor  @relation(fields: [doctorId], references: [id])
+  date      DateTime
+  notes     String?
+  patient   Patient              @relation(fields: [patientId], references: [id])
+  doctor    Doctor               @relation(fields: [doctorId], references: [id])
   details   PrescriptionDetail[]
 }
 
 model PrescriptionDetail {
-  id             Int       @id @default(autoincrement())
+  id             Int          @id @default(autoincrement())
   username       String
   prescriptionId Int
   medicineId     Int
@@ -268,172 +270,172 @@ model PrescriptionDetail {
 }
 
 model LabTest {
-  id          Int       @id @default(autoincrement())
-  username    String
-  testName    String
-  description String?
+  id           Int          @id @default(autoincrement())
+  username     String
+  testName     String
+  description  String?
   departmentId Int
-  department  Department @relation(fields: [departmentId], references: [id])
-  cost        Float
-  requests    LabRequest[]
+  department   Department   @relation(fields: [departmentId], references: [id])
+  cost         Float
+  requests     LabRequest[]
 }
 
 model LabRequest {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   username    String
   patientId   Int
   doctorId    Int
   testId      Int
   requestDate DateTime
   status      String
-  patient     Patient @relation(fields: [patientId], references: [id])
-  doctor      Doctor  @relation(fields: [doctorId], references: [id])
-  test        LabTest @relation(fields: [testId], references: [id])
+  patient     Patient    @relation(fields: [patientId], references: [id])
+  doctor      Doctor     @relation(fields: [doctorId], references: [id])
+  test        LabTest    @relation(fields: [testId], references: [id])
   result      LabResult?
 }
 
 model LabResult {
-  id          Int       @id @default(autoincrement())
-  username    String
-  labRequestId Int @unique
+  id            Int        @id @default(autoincrement())
+  username      String
+  labRequestId  Int        @unique
   resultDetails String
-  resultDate  DateTime
-  verifiedBy  Int
-  labRequest  LabRequest @relation(fields: [labRequestId], references: [id])
+  resultDate    DateTime
+  verifiedBy    Int
+  labRequest    LabRequest @relation(fields: [labRequestId], references: [id])
 }
 
 model Treatment {
-  id          Int       @id @default(autoincrement())
-  username    String
-  patientId   Int
-  doctorId    Int
+  id            Int      @id @default(autoincrement())
+  username      String
+  patientId     Int
+  doctorId      Int
   treatmentName String
   treatmentDate DateTime
-  notes       String?
-  outcome     String?
-  patient     Patient @relation(fields: [patientId], references: [id])
-  doctor      Doctor  @relation(fields: [doctorId], references: [id])
+  notes         String?
+  outcome       String?
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  doctor        Doctor   @relation(fields: [doctorId], references: [id])
 }
 
 model MedicalRecord {
-  id            Int       @id @default(autoincrement())
-  username      String
-  doctorId      Int
-  patientId     Int
-  recordDate    DateTime
-  diagnosis     String
+  id              Int      @id @default(autoincrement())
+  username        String
+  doctorId        Int
+  patientId       Int
+  recordDate      DateTime
+  diagnosis       String
   treatmentsGiven String?
-  allergies     String?
-  notes         String?
-  patient       Patient @relation(fields: [patientId], references: [id])
-  doctor        Doctor  @relation(fields: [doctorId], references: [id])
+  allergies       String?
+  notes           String?
+  patient         Patient  @relation(fields: [patientId], references: [id])
+  doctor          Doctor   @relation(fields: [doctorId], references: [id])
 }
 
 //
 // 💊 PHARMACY & INVENTORY
 //
 model Medicine {
-  id              Int       @id @default(autoincrement())
-  username        String
-  name            String
-  genericName     String
-  category        String
-  manufacturer    String
-  quantityAvailable Int
-  expiryDate      DateTime
-  unitPrice       Float
+  id                  Int                   @id @default(autoincrement())
+  username            String
+  name                String
+  genericName         String
+  category            String
+  manufacturer        String
+  quantityAvailable   Int
+  expiryDate          DateTime
+  unitPrice           Float
   prescriptionDetails PrescriptionDetail[]
-  pharmacyTxns    PharmacyTransaction[]
+  pharmacyTxns        PharmacyTransaction[]
 }
 
 model PharmacyTransaction {
-  id          Int       @id @default(autoincrement())
-  username    String
-  medicineId  Int
-  patientId   Int
-  quantity    Int
+  id              Int             @id @default(autoincrement())
+  username        String
+  medicineId      Int
+  patientId       Int
+  quantity        Int
   transactionDate DateTime
-  type        TransactionType
-  medicine    Medicine @relation(fields: [medicineId], references: [id])
-  patient     Patient  @relation(fields: [patientId], references: [id])
+  type            TransactionType
+  medicine        Medicine        @relation(fields: [medicineId], references: [id])
+  patient         Patient         @relation(fields: [patientId], references: [id])
 }
 
 model InventoryItem {
-  id        Int       @id @default(autoincrement())
-  username  String
-  name      String
-  category  String
-  quantity  Int
-  unitCost  Float
+  id         Int      @id @default(autoincrement())
+  username   String
+  name       String
+  category   String
+  quantity   Int
+  unitCost   Float
   supplierId Int
-  supplier  Supplier @relation(fields: [supplierId], references: [id])
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
 }
 
 model Supplier {
-  id        Int       @id @default(autoincrement())
-  username  String
-  name      String
+  id          Int             @id @default(autoincrement())
+  username    String
+  name        String
   contactInfo String
-  email     String
-  address   String
-  inventory InventoryItem[]
+  email       String
+  address     String
+  inventory   InventoryItem[]
 }
 
 //
 // 💰 FINANCE & BILLING
 //
 model Billing {
-  id          Int       @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   username    String
   patientId   Int
-  admissionId Int? @unique
+  admissionId Int?          @unique
   totalAmount Float
   status      BillingStatus
   billingDate DateTime
-  patient     Patient  @relation(fields: [patientId], references: [id])
-  admission   Admission? @relation(fields: [admissionId], references: [id])
+  patient     Patient       @relation(fields: [patientId], references: [id])
+  admission   Admission?    @relation(fields: [admissionId], references: [id])
   invoices    Invoice[]
 }
 
 model Invoice {
-  id          Int       @id @default(autoincrement())
-  username    String
-  billingId   Int
-  issueDate   DateTime
-  dueDate     DateTime
-  amount      Float
-  status      String
-  billing     Billing  @relation(fields: [billingId], references: [id])
-  payments    Payment[]
+  id        Int       @id @default(autoincrement())
+  username  String
+  billingId Int
+  issueDate DateTime
+  dueDate   DateTime
+  amount    Float
+  status    String
+  billing   Billing   @relation(fields: [billingId], references: [id])
+  payments  Payment[]
 }
 
 model Payment {
-  id          Int       @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   username    String
   invoiceId   Int
   paymentDate DateTime
   amountPaid  Float
   method      PaymentMethod
   receiptNo   String
-  invoice     Invoice @relation(fields: [invoiceId], references: [id])
+  invoice     Invoice       @relation(fields: [invoiceId], references: [id])
 }
 
 model Insurance {
-  id          Int       @id @default(autoincrement())
-  username    String
-  patientId   Int @unique
-  providerName String
-  policyNumber String
+  id              Int      @id @default(autoincrement())
+  username        String
+  patientId       Int      @unique
+  providerName    String
+  policyNumber    String
   coverageDetails String?
-  expiryDate  DateTime
-  patient     Patient @relation(fields: [patientId], references: [id])
+  expiryDate      DateTime
+  patient         Patient  @relation(fields: [patientId], references: [id])
 }
 
 model Expense {
-  id        Int       @id @default(autoincrement())
-  username  String
-  category  String
-  amount    Float
-  date      DateTime
+  id         Int      @id @default(autoincrement())
+  username   String
+  category   String
+  amount     Float
+  date       DateTime
   approvedBy String
 }

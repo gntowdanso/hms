@@ -5,10 +5,10 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get('id');
   if (id) {
-    const hospital = await prisma.hospital.findUnique({ where: { id: Number(id) }, include: { departments: true, patients: true } });
+    const hospital = await prisma.hospital.findUnique({ where: { id: Number(id) }, include: { Department: true, Patient: true } });
     return NextResponse.json(hospital);
   }
-  const hospitals = await prisma.hospital.findMany({ include: { departments: true, patients: true } });
+  const hospitals = await prisma.hospital.findMany({ include: { Department: true, Patient: true } });
   return NextResponse.json(hospitals);
 }
 

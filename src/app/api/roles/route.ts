@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
 
+// Static roles list since roles are represented as a string on UserAccount
 export async function GET() {
-  try {
-    const roles = await prisma.role.findMany({ select: { id: true, roleName: true } });
-    return NextResponse.json(roles);
-  } catch (err) {
-    return NextResponse.json({ error: 'Failed to load roles' }, { status: 500 });
-  }
+  const roles = [
+    { id: 1, roleName: 'Admin' },
+    { id: 2, roleName: 'Staff' },
+    { id: 3, roleName: 'Doctor' },
+    { id: 4, roleName: 'Nurse' },
+    { id: 5, roleName: 'Patient' },
+  ];
+  return NextResponse.json(roles);
 }
