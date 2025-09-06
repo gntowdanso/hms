@@ -9,7 +9,7 @@ import { FaUserInjured, FaStethoscope, FaUserNurse, FaBed, FaCalendarCheck, FaFl
 type AnyRec = Record<string, any>;
 
 const numberFmt = (n: number) => new Intl.NumberFormat().format(n);
-const currencyFmt = (n: number) => new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(n);
+const currencyFmt = (n: number) => new Intl.NumberFormat('en-GH', { style: "currency", currency: "GHS" }).format(n);
 
 const Card: React.FC<{ title: string; value: string; icon: React.ReactNode; accent?: string; sub?: string }> = ({ title, value, icon, accent = "bg-blue-100 text-blue-700", sub }) => (
   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center gap-4">

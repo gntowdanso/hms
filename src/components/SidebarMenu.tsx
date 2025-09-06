@@ -11,7 +11,9 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
+  { label: 'Dashboard', icon: <FaLayerGroup />, group: 'Management', href: '/management/dashboard' },
   { label: 'Hospital', icon: <FaLayerGroup />, group: 'Management', href: '/management/hospital' },
+  
   { label: 'Departments', icon: <FaUsers />, group: 'Management', href: '/management/departments' },
 
   { label: 'Wards', icon: <FaUsers />, group: 'Management', href: '/management/ward' },

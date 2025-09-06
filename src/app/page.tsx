@@ -5,6 +5,7 @@ import SidebarMenu from '../components/SidebarMenu';
 import { getAuth } from '../utils/auth';
 import LogoutButton from '../components/LogoutButton';
 import { useRouter } from 'next/navigation';
+import ManagementDashboardPage from './management/dashboard/page';
 
 const HomePage: React.FC = () => {
   const [authenticated, setAuthenticated] = useState(false);
@@ -30,6 +31,7 @@ const HomePage: React.FC = () => {
   <LogoutButton />
         <h2 className="text-3xl font-bold mb-4">Welcome to Hospital Management System</h2>
         <p className="text-lg">Select an option from the menu to get started.</p>
+   
       </main>
     </div>
   );
