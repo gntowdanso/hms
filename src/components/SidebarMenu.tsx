@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
-import { FaUser, FaUsers, FaChalkboardTeacher, FaBook, FaCog, FaLayerGroup, FaTools, FaChevronDown, FaChevronRight, FaPills, FaWarehouse, FaDollarSign } from 'react-icons/fa';
+import { FaUser, FaUsers, FaChalkboardTeacher, FaBook, FaCog, FaLayerGroup, FaTools, FaChevronDown, FaChevronRight, FaPills, FaWarehouse, FaDollarSign, FaCashRegister } from 'react-icons/fa';
+//import { FaC } from 'react-icons/fa6';
 
 interface MenuItem {
   label: string;
@@ -40,20 +41,22 @@ const menuItems: MenuItem[] = [
   { label: 'Inventory', icon: <FaWarehouse />, group: 'Pharmacy', href: '/pharmacy/inventory' },
   { label: 'Transactions', icon: <FaPills />, group: 'Pharmacy', href: '/pharmacy/transactions' },
 
-  { label: 'Fees & Charges', icon: <FaDollarSign />, group: 'Finance', href: '/finance/fees' },
-  { label: 'Billing', icon: <FaDollarSign />, group: 'Finance', href: '/finance/billing' },
-  { label: 'Invoices', icon: <FaDollarSign />, group: 'Finance', href: '/finance/invoices' },
-  { label: 'Payments', icon: <FaDollarSign />, group: 'Finance', href: '/finance/payments' },
-  { label: 'Insurance', icon: <FaDollarSign />, group: 'Finance', href: '/finance/insurance' },
-  { label: 'Expenses', icon: <FaDollarSign />, group: 'Finance', href: '/finance/expenses' },
+  { label: 'Fees & Charges', icon: <FaCashRegister />, group: 'Finance', href: '/finance/fees' },
+  { label: 'Billing', icon: <FaCashRegister />, group: 'Finance', href: '/finance/billing' },
+  { label: 'Invoices', icon: <FaCashRegister />, group: 'Finance', href: '/finance/invoices' },
+  { label: 'Payments', icon: <FaCashRegister />, group: 'Finance', href: '/finance/payments' },
+  { label: 'Insurance', icon: <FaCashRegister />, group: 'Finance', href: '/finance/insurance' },
+  { label: 'Expenses', icon: <FaCashRegister />, group: 'Finance', href: '/finance/expenses' },
 
   { label: 'Settings', icon: <FaCog />, group: 'System', href: '/settings' },
 ];
 
 const groupIcons: Record<string, React.ReactNode> = {
   Management: <FaLayerGroup className="mr-2" />,
+  Patient: <FaUsers className="mr-2" />,
+  Lab: <FaBook className="mr-2" />,
   Pharmacy: <FaPills className="mr-2" />,
-  Finance: <FaDollarSign className="mr-2" />,
+  Finance: <FaCashRegister className="mr-2" />,
   Users: <FaUser className="mr-2" />,
   System: <FaTools className="mr-2" />,
 };
