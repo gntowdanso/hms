@@ -22,7 +22,7 @@ const menuItems: MenuItem[] = [
   { label: 'Staff', icon: <FaChalkboardTeacher />, group: 'Management', href: '/management/staff' },
   { label: 'User Account', icon: <FaChalkboardTeacher />, group: 'Management', href: '/management/useraccount' },
 
-  { label: 'Patients', icon: <FaUsers />, group: 'Patient', href: '/patient/patients' },
+  { label: 'Patients', icon: <FaUsers />, group: 'Patient', href: '/patient/patient' },
   { label: 'Admissions', icon: <FaUser />, group: 'Patient', href: '/patient/admissions' },
   { label: 'Diagnoses', icon: <FaUser />, group: 'Patient', href: '/patient/diagnoses' },
   { label: 'Prescriptions', icon: <FaUser />, group: 'Patient', href: '/patient/prescriptions' },
