@@ -5,11 +5,12 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs'; // ensure Node (pdf-lib needs Node APIs)
 
-// Note: In Next.js 15 dynamic route params may be a Promise; await before use to avoid warning.
-export async function GET(_req: Request, context: { params: Promise<{ id: string }> | { id: string } }) {
+// Next.js provides context.params (sometimes wrapped); keep signature simple for type checker and unwrap at runtime.
+export async function GET(_req: Request, context: any) {
   try {
-  const awaited = 'then' in (context.params as any) ? await (context.params as Promise<{ id: string }>) : (context.params as { id: string });
-  const idNum = Number(awaited.id);
+  const ctx = (context && typeof context.then === 'function') ? await context : context;
+  const params = ctx?.params || {};
+  const idNum = Number(params.id);
     if(!idNum) return NextResponse.json({ error: 'Invalid id'},{ status:400 });
     const report = await prisma.serviceTestReport.findUnique({
       where:{ id: idNum },
