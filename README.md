@@ -2,35 +2,65 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 1. Install dependencies
+```
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment variables
+Copy `.env.example` to `.env` and set `DATABASE_URL_HMS` to your Postgres connection string.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Example (Docker local):
+```
+DATABASE_URL_HMS="postgresql://postgres:postgres@localhost:5432/hmsdb?schema=public"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Apply Prisma migrations
+Generate and apply the database schema (creates all hospital & service order tables):
+```
+npx prisma migrate dev --name init_hms
+```
+If you modify `prisma/schema.prisma` later, run another `npx prisma migrate dev`.
 
-## Learn More
+To inspect the DB:
+```
+npx prisma studio
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Run the dev server
+```
+npm run dev
+```
+Visit http://localhost:3000
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 5. Common troubleshooting
+500 on `/api/serviceorders` usually means:
+- Database not reachable (check `DATABASE_URL_HMS`).
+- Migrations not applied (run migrate command above).
+- Using an old database missing new columns (run `npx prisma migrate dev` or `npx prisma migrate reset` if safe to wipe).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 6. AI Features
+Service test reports support AI extraction & summarization (Gemini primary, fallback provider). Raw extracted text stored in `ServiceTestReport.actualResult`; summary stored in `aiSummary` with provider metadata.
 
-## Deploy on Vercel
+## Project Structure Highlights
+- `prisma/schema.prisma` Domain models (hospital, patients, service orders, reports, AI cache, etc.)
+- `src/app/api/*` REST endpoints (Next.js route handlers)
+- `src/app/homeclinic/*` UI pages (service orders, reports)
+- `src/app/api/ai/*` AI extraction & summarization
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
+Before building in CI/hosting:
+```
+prisma migrate deploy
+next build
+```
+Ensure `DATABASE_URL_HMS` is set in the deployment environment.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Safety Commands (use with caution)
+Reset DB (drops & re-applies migrations):
+```
+npx prisma migrate reset
+```
+
+## License
+Internal project (no explicit license specified).

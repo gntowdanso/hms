@@ -136,6 +136,9 @@ model Patient {
   pharmacyTxns     PharmacyTransaction[]
   billingRecords   Billing[]
   insurance        Insurance?
+  // Service ordering relations
+  serviceOrders        ServiceOrder[]
+  serviceOrderPayments ServiceOrderPayment[]
 }
 
 model Doctor {
@@ -197,6 +200,8 @@ model UserAccount {
   role         String // (Patient, Doctor, Nurse, Staff, Admin)
   lastLogin    DateTime?
   isActive     Boolean   @default(true)
+  // Reports authored by this user
+  serviceTestReports ServiceTestReport[]
 }
 
 //
@@ -214,6 +219,8 @@ model Appointment {
   patient         Patient           @relation(fields: [patientId], references: [id])
   doctor          Doctor            @relation(fields: [doctorId], references: [id])
   department      Department        @relation(fields: [departmentId], references: [id])
+  // Service orders linked to this appointment (if any)
+  serviceOrders   ServiceOrder[]
 }
 
 model Admission {
@@ -481,4 +488,127 @@ model Expense {
   amount     Float
   date       DateTime
   approvedBy String
+}
+
+///   
+///
+///
+//
+// 🧪 Services & Packages
+//
+
+model Category {
+  id           Int       @id @default(autoincrement())
+  categoryName String
+  services     Service[]
+}
+
+model SampleType {
+  id          Int       @id @default(autoincrement())
+  sampleName  String
+  services    Service[]
+}
+
+
+model Service {
+  id                     Int          @id @default(autoincrement())
+  serviceName            String
+  description            String?
+  price                  Float
+  preparationInstructions String?
+  turnaroundTime         String?
+
+  // Relations
+  categoryId Int
+  category   Category   @relation(fields: [categoryId], references: [id])
+
+  sampleTypeId Int
+  sampleType   SampleType @relation(fields: [sampleTypeId], references: [id])
+
+  serviceOrders ServiceOrder[]
+  packages      ServicePackage[] @relation("ServiceInPackages")
+}
+
+model ServicePackage {
+  id           Int       @id @default(autoincrement())
+  packageName  String
+  description  String?
+  price        Float
+  discount     Float?
+
+  // Many-to-Many with Services
+  includedTests Service[] @relation("ServiceInPackages")
+
+  serviceOrders ServiceOrder[]
+}
+
+//
+// 👩‍⚕️ Service Orders & Reports
+//
+model ServiceOrder {
+  id             Int       @id @default(autoincrement())
+  doctorReferral Boolean   @default(false)
+  status         String    @default("Pending")
+  createdAt      DateTime  @default(now())
+
+  // Relations
+  patientId     Int
+  appointmentId Int?
+  serviceId     Int?
+  packageId     Int?
+
+  patient        Patient        @relation(fields: [patientId], references: [id])
+  appointment    Appointment?   @relation(fields: [appointmentId], references: [id])
+  service        Service?       @relation(fields: [serviceId], references: [id])
+  servicePackage ServicePackage? @relation(fields: [packageId], references: [id])
+
+  report   ServiceTestReport?
+  payments ServiceOrderPayment[]
+}
+
+model ServiceTestReport {
+  id           Int       @id @default(autoincrement())
+  filePath     String?
+  findings     String?
+  reportBase64 String?
+  actualResult String?   // Full extracted raw text from uploaded file (AI or parsing)
+  resultValues Json?
+  comments     String?
+  reportDate   DateTime  @default(now())
+  // AI augmentation
+  aiSummary    String?
+  aiProvider   String?
+  aiInputHash  String? @unique
+
+  // Relations
+  orderId         Int       @unique
+  reportedByUserId Int?
+
+  serviceOrder   ServiceOrder  @relation(fields: [orderId], references: [id])
+  reportedByUser UserAccount?  @relation(fields: [reportedByUserId], references: [id])
+}
+
+// Cached AI summaries to avoid recomputation for identical input
+model AISummaryCache {
+  id         Int      @id @default(autoincrement())
+  inputHash  String   @unique
+  provider   String
+  summary    String
+  createdAt  DateTime @default(now())
+}
+ 
+model ServiceOrderPayment {
+  id            Int      @id @default(autoincrement())
+  amount        Float
+  paymentMethod String
+  transactionId String?
+  status        String
+  paymentDate   DateTime @default(now())
+
+  // Relations
+  patientId       Int
+  serviceOrderId  Int
+
+  patient      Patient      @relation(fields: [patientId], references: [id])
+  serviceOrder ServiceOrder @relation(fields: [serviceOrderId], references: [id])
 }

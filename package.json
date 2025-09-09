@@ -5,17 +5,21 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-  "vercel-build": "prisma migrate deploy && next build",
+    "vercel-build": "prisma migrate deploy && next build",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
     "postinstall": "prisma generate",
-    "prebuild": "prisma generate"
+    "prebuild": "prisma generate",
+    "seed": "ts-node --transpile-only prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.0.1",
+    "@google/generative-ai": "^0.21.0",
     "bcryptjs": "^3.0.2",
     "next": "15.5.2",
+  "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.4.168",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-icons": "^5.5.0"
@@ -28,6 +32,7 @@
     "@types/react-dom": "^19",
     "prisma": "^6.0.1",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
