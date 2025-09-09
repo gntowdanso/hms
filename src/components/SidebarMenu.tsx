@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { FaUser, FaUsers, FaChalkboardTeacher, FaBook, FaCog, FaLayerGroup, FaTools, FaChevronDown, FaChevronRight, FaPills, FaWarehouse, FaDollarSign, FaCashRegister } from 'react-icons/fa';
 //import { FaC } from 'react-icons/fa6';
 
@@ -68,11 +70,30 @@ const groupedItems = menuItems.reduce((acc, item) => {
   acc[item.group].push(item);
   return acc;
 }, {} as Record<string, MenuItem[]>);
+const allGroups = Object.keys(groupedItems);
 
 const SidebarMenu: React.FC = () => {
-  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({ Management: false });
+  // collapsed[group] === true  => group is collapsed
+  // collapsed[group] === false => group is expanded
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() => {
+    const map: Record<string, boolean> = {};
+    allGroups.forEach(g => { map[g] = true; });
+    if (map['Management'] !== undefined) map['Management'] = false; // open Management by default
+    return map;
+  });
 
-  const toggleGroup = (group: string) => setCollapsed(prev => ({ ...prev, [group]: !prev[group] }));
+  const pathname = usePathname();
+
+  const toggleGroup = (group: string) => {
+    setCollapsed(prev => {
+      const next: Record<string, boolean> = { ...prev };
+      const willOpen = prev[group]; // currently collapsed? then will open
+      // Accordion behavior: close all groups first
+      Object.keys(next).forEach(g => { next[g] = true; });
+      next[group] = !willOpen; // toggle target
+      return next;
+    });
+  };
 
   return (
     <aside className="w-64 h-screen bg-gray-800 text-white flex flex-col p-4">
@@ -86,16 +107,27 @@ const SidebarMenu: React.FC = () => {
             </div>
             <div className="mr-2">{collapsed[group] ? <FaChevronRight /> : <FaChevronDown />}</div>
           </div>
-          {!collapsed[group] && (
+          {collapsed[group] === false && (
             <ul>
               {items.map(item => {
                 const href = item.href || '#';
-                return (
-                  <li key={item.label} className="flex items-center gap-3 py-2 px-6 rounded hover:bg-gray-700 cursor-pointer" onClick={() => { if (href !== '#') window.location.href = href; }}>
-                    {item.icon}
-                    <span>{item.label}</span>
-                  </li>
-                );
+                const active = href !== '#' && pathname.startsWith(href);
+                const base = 'flex items-center gap-3 py-2 px-6 rounded transition-colors';
+                const cls = active ? `${base} bg-gray-700 text-white font-semibold` : `${base} hover:bg-gray-700 text-gray-200`;
+                return href === '#'
+                  ? (
+                    <li key={item.label} className={cls}>
+                      {item.icon}
+                      <span>{item.label}</span>
+                    </li>
+                  ) : (
+                    <li key={item.label}>
+                      <Link href={href} className={cls}>
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </Link>
+                    </li>
+                  );
               })}
             </ul>
           )}
