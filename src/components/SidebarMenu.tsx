@@ -36,6 +36,13 @@ const menuItems: MenuItem[] = [
 
   { label: 'Patient  Report', icon: <FaBook />, group: 'HomeClinic', href: '/homeclinic/servicereports' },
   
+  { label: 'Lab Dashboard', icon: <FaBook />, group: 'Lab', href: '/lab' },
+  { label: 'Lab Types', icon: <FaBook />, group: 'Lab', href: '/lab/types' },
+  { label: 'Lab Tests', icon: <FaBook />, group: 'Lab', href: '/lab/tests' },
+  { label: 'Lab Requests', icon: <FaBook />, group: 'Lab', href: '/lab/requests' },
+  { label: 'Lab Results', icon: <FaBook />, group: 'Lab', href: '/lab/results' },
+  { label: 'Result Details', icon: <FaBook />, group: 'Lab', href: '/lab/resultdetails' },
+  
   /*
 { label: 'Fees & Charges', icon: <FaCashRegister />, group: 'HomeClinic', href: '/finance/fees' },
   { label: 'Billing', icon: <FaCashRegister />, group: 'HomeClinic', href: '/finance/billing' },

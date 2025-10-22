@@ -42,11 +42,43 @@ Visit http://localhost:3000
 ### 6. AI Features
 Service test reports support AI extraction & summarization (Gemini primary, fallback provider). Raw extracted text stored in `ServiceTestReport.actualResult`; summary stored in `aiSummary` with provider metadata.
 
+### 7. Lab Management System
+The hospital includes a comprehensive laboratory management system with the following features:
+
+#### Lab Dashboard (`/lab`)
+- Overview of lab statistics (types, tests, requests, results)
+- Quick access to all lab management pages
+- Recent lab requests display
+- Statistics on pending and completed requests
+
+#### Lab Components
+- **Lab Types** (`/lab/types`): Manage laboratory test categories
+- **Lab Tests** (`/lab/tests`): Configure available tests with pricing and departments
+- **Lab Requests** (`/lab/requests`): Create and manage lab test requests from doctors for patients
+- **Lab Results** (`/lab/results`): Enter and view lab test results with support for images
+- **Result Details** (`/lab/resultdetails`): Detailed result entries with code, reference ranges, flags, and ratings
+
+#### Lab Workflow
+1. Doctor creates a lab request for a patient specifying the test required
+2. Lab technician performs the test
+3. Results are entered in the system with optional image attachments
+4. Detailed result breakdowns can be added with reference ranges and interpretations
+5. Results are verified and made available to the requesting doctor
+
+All lab pages support:
+- Create, Read, Update, Delete (CRUD) operations
+- Search and filtering
+- Pagination
+- Image upload (base64 or URL)
+- Responsive design
+
 ## Project Structure Highlights
-- `prisma/schema.prisma` Domain models (hospital, patients, service orders, reports, AI cache, etc.)
+- `prisma/schema.prisma` Domain models (hospital, patients, service orders, reports, AI cache, lab management, etc.)
 - `src/app/api/*` REST endpoints (Next.js route handlers)
 - `src/app/homeclinic/*` UI pages (service orders, reports)
+- `src/app/lab/*` Lab management UI pages (dashboard, types, tests, requests, results)
 - `src/app/api/ai/*` AI extraction & summarization
+- `src/app/api/lab*` Lab management API endpoints
 
 ## Deployment
 Before building in CI/hosting:
